@@ -68,7 +68,7 @@ export const TodoMain: React.FC<Props> = ({
               <div
                 data-cy="TodoLoader"
                 className={cn('modal', 'overlay', {
-                  'is-active': loader || deleteTodoIds.includes(todo.id),
+                  'is-active': deleteTodoIds.includes(todo.id),
                 })}
               >
                 {/* eslint-disable-next-line max-len */}

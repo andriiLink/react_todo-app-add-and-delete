@@ -156,16 +156,12 @@ export const App: React.FC = () => {
     }
   };
 
-  const deleteAllCopletedTodo = async (todosToDelete: Todo[]) => {
-    const idsToDelete = todosToDelete
-      .filter(todo => todo.completed === true)
-      .map(todo => todo.id);
-
+  const deleteAllCopletedTodo = async (todosToDelete: number[]) => {
     setErrorType(null);
     setLoader(true);
 
     try {
-      const deletionPromises = idsToDelete.map(id => deleteTodo(id));
+      const deletionPromises = todosToDelete.map(id => deleteTodo(id));
 
       const result = await Promise.allSettled(deletionPromises);
 
@@ -191,7 +187,7 @@ export const App: React.FC = () => {
   };
 
   const handleDeleteCompletedTodos = () => {
-    deleteAllCopletedTodo(todos);
+    deleteAllCopletedTodo(todoToDeleteIds);
   };
 
   const visibleTodos: Todo[] = getPreparedTodos(todos, status);
