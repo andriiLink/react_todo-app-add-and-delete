@@ -19,8 +19,8 @@ export const App: React.FC = () => {
   const [status, setStatus] = useState(Status.All);
   const [errorType, setErrorType] = useState<ErrorType | null>(null);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
-  //const [deleteLoading, setDeleteLoading] = useState(false);
-  //const [todoToDeleteIds, setTodoToDeleteIds] = useState<Todo['id'][]>([]);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [todoToDeleteIds, setTodoToDeleteIds] = useState<Todo['id'][]>([]);
 
   useEffect(() => {
     setLoader(true);
@@ -139,7 +139,8 @@ export const App: React.FC = () => {
   };
 
   const handleDeleteTodo = async (todoId: Todo['id']) => {
-    setLoader(true);
+    setTodoToDeleteIds(currentIds => [...currentIds, todoId]);
+    setDeleteLoading(true);
     setErrorType(null);
 
     try {
@@ -148,9 +149,9 @@ export const App: React.FC = () => {
       setTodos(currTodo => currTodo.filter(todo => todo.id !== todoId));
     } catch (error) {
       setErrorType(ErrorType.Delete);
-      //throw new Error('unable to delete todo');
     } finally {
-      setLoader(false);
+      // setLoadingTodo(false);
+      setDeleteLoading(false);
       todoInput.current?.focus();
     }
   };
@@ -213,6 +214,8 @@ export const App: React.FC = () => {
         <TodoMain
           visibleTodos={visibleTodos}
           loader={loader}
+          deleteLoading={deleteLoading}
+          deleteTodoIds={todoToDeleteIds}
           tempTodo={tempTodo}
           onDelete={handleDeleteTodo}
         />

@@ -5,6 +5,8 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   visibleTodos: Todo[];
+  deleteLoading: boolean;
+  deleteTodoIds: number[];
   loader: boolean;
   tempTodo: Todo | null;
   onDelete: (todoId: Todo['id']) => void;
@@ -12,6 +14,7 @@ type Props = {
 
 export const TodoMain: React.FC<Props> = ({
   visibleTodos,
+  deleteTodoIds,
   loader,
   tempTodo,
   onDelete,
@@ -65,7 +68,7 @@ export const TodoMain: React.FC<Props> = ({
               <div
                 data-cy="TodoLoader"
                 className={cn('modal', 'overlay', {
-                  'is-active': loader,
+                  'is-active': loader || deleteTodoIds.includes(todo.id),
                 })}
               >
                 {/* eslint-disable-next-line max-len */}
