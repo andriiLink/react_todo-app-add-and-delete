@@ -153,15 +153,22 @@ export const App: React.FC = () => {
       // setLoadingTodo(false);
       setDeleteLoading(false);
       todoInput.current?.focus();
+      setTodoToDeleteIds([]);
     }
   };
 
-  const deleteAllCopletedTodo = async (todosToDelete: number[]) => {
+  const deleteAllCopletedTodo = async () => {
     setErrorType(null);
-    setLoader(true);
+    setDeleteLoading(true);
+
+    const completedTodos = todos
+      .filter(todo => todo.completed === true)
+      .map(todo => todo.id);
+
+    setTodoToDeleteIds(completedTodos);
 
     try {
-      const deletionPromises = todosToDelete.map(id => deleteTodo(id));
+      const deletionPromises = completedTodos.map(id => deleteTodo(id));
 
       const result = await Promise.allSettled(deletionPromises);
 
@@ -182,12 +189,19 @@ export const App: React.FC = () => {
       setErrorType(ErrorType.Delete);
       throw new Error('Unable to delete todo');
     } finally {
-      setLoader(false);
+      setDeleteLoading(false);
+      setTodoToDeleteIds([]);
     }
   };
 
   const handleDeleteCompletedTodos = () => {
-    deleteAllCopletedTodo(todoToDeleteIds);
+    // setTodoToDeleteIds(
+    //   todos.filter(todo => todo.completed === true).map(todo => todo.id),
+    // );
+    // console.log(
+    //   todos.filter(todo => todo.completed === true).map(todo => todo.id),
+    // );
+    deleteAllCopletedTodo();
   };
 
   const visibleTodos: Todo[] = getPreparedTodos(todos, status);
@@ -220,6 +234,7 @@ export const App: React.FC = () => {
         {todos.length !== 0 && (
           <TodoFooter
             status={status}
+            completed={todos}
             activeTodos={activeTodos}
             isOneCompletedTodo={isOneCompleted}
             onSwitch={handleSwitchStatus}

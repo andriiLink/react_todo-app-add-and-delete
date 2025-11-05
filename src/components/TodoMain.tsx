@@ -16,6 +16,7 @@ export const TodoMain: React.FC<Props> = ({
   visibleTodos,
   deleteTodoIds,
   loader,
+  // deleteLoading,
   tempTodo,
   onDelete,
 }) => {

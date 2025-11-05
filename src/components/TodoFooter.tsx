@@ -6,14 +6,16 @@ import { Todo } from '../types/Todo';
 
 type Props = {
   status: Status;
+  completed: Todo[];
   activeTodos: Todo[];
   isOneCompletedTodo: boolean;
   onSwitch: (status: Status) => void;
-  onDeleteCompletedTodos: () => void;
+  onDeleteCompletedTodos: (sdf: number[]) => void;
 };
 
 export const TodoFooter: React.FC<Props> = ({
   status,
+  completed,
   activeTodos,
   isOneCompletedTodo,
   onSwitch,
@@ -34,7 +36,12 @@ export const TodoFooter: React.FC<Props> = ({
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={isOneCompletedTodo}
-        onClick={onDeleteCompletedTodos}
+        onClick={() => {
+          completed
+            .filter(todo => todo.completed === true)
+            .map(todo => todo.id);
+          onDeleteCompletedTodos(completed);
+        }}
       >
         Clear completed
       </button>
